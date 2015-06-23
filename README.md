@@ -3,7 +3,7 @@
 
 #Auto ID
 
-A Drupal module for generating dateimt-based serial numbers, for example `SALES201502280001`.
+A Drupal module for generating datetime-based serial numbers, for example `SALES201502280001`.
 
 
 
