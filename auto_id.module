@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: dustise
+ * Date: 14-8-12
+ * Time: 下午3:03
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function auto_id_menu() {
+  $items = array();
+  $items['admin/config/auto_id'] = array(
+    'title' => 'Auto ID configuration',
+    'access arguments' => array('administer site configuration'),
+    'position' => 'left',
+    'weight' => -100,
+    'page callback' => 'system_admin_menu_block_page',
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+  $items['admin/config/auto_id/create'] = array(
+    'title' => 'Create new ID schema',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('auto_id_create_schema_form'),
+    'file' => 'auto_id.config.inc',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['admin/config/auto_id/edit'] = array(
+    'title' => 'Manage existing schema',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('auto_id_edit_schema_form'),
+    'file' => 'auto_id.config.inc',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+
