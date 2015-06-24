@@ -14,7 +14,7 @@ Install the module, Then you can find configuration link in `admin/config`.
 
 You can define new schema in the config page.
 
-At last , you can use `auto_id::new_id($module_name, $prefix)` in your **PHP code** to generate a new serial number.
+At last , you can use `date_serial::new_id($module_name, $prefix)` in your **PHP code** to generate a new serial number.
 
 
 ---
@@ -31,4 +31,4 @@ At last , you can use `auto_id::new_id($module_name, $prefix)` in your **PHP cod
 
 可以在配置页面生成新的ID样式。
 
-接下来就可以在**代码中**使用`auto_id::new_id($module_name, $prefix)`的形式来生成新的流水号了
+接下来就可以在**代码中**使用`date_serial::new_id($module_name, $prefix)`的形式来生成新的流水号了

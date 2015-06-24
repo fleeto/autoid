@@ -1,5 +1,5 @@
-name = Auto Id
+name = Date Serial
 description = It's a module for coders: generate datetime-based serial numbers
 core = 7.x
 
-files[] = auto_id.inc
+files[] = date_serial.inc

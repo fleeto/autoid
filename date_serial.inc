@@ -6,12 +6,12 @@
  * Date: 14-8-12
  * Time: 下午3:03
  */
-class auto_id {
+class date_serial {
   public static function new_id($module_name, $prefix) {
-    $schema_list = cache_get('auto_id_schema');
+    $schema_list = cache_get('date_serial_schema');
     if ($schema_list === FALSE) {
-      $schema_list = auto_id::get_all_schema_id();
-      cache_set('auto_id_schema', $schema_list);
+      $schema_list = date_serial::get_all_schema_id();
+      cache_set('date_serial_schema', $schema_list);
     }
     else {
       $schema_list = $schema_list->data;
@@ -127,7 +127,7 @@ class auto_id {
   }
 
   public static function remove_schema($sid) {
-    $schema = auto_id::get_schema_info($sid);
+    $schema = date_serial::get_schema_info($sid);
     if (!$schema) {
       return FALSE;
     }

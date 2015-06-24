@@ -10,9 +10,9 @@
 /**
  * Implements hook_menu().
  */
-function auto_id_menu() {
+function date_serial_menu() {
   $items = array();
-  $items['admin/config/auto_id'] = array(
+  $items['admin/config/date_serial'] = array(
     'title' => 'Auto ID configuration',
     'access arguments' => array('administer site configuration'),
     'position' => 'left',
@@ -21,19 +21,19 @@ function auto_id_menu() {
     'file' => 'system.admin.inc',
     'file path' => drupal_get_path('module', 'system'),
   );
-  $items['admin/config/auto_id/create'] = array(
+  $items['admin/config/date_serial/create'] = array(
     'title' => 'Create new ID schema',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('auto_id_create_schema_form'),
-    'file' => 'auto_id.config.inc',
+    'page arguments' => array('date_serial_create_schema_form'),
+    'file' => 'date_serial.config.inc',
     'access arguments' => array('administer site configuration'),
     'type' => MENU_NORMAL_ITEM,
   );
-  $items['admin/config/auto_id/edit'] = array(
+  $items['admin/config/date_serial/edit'] = array(
     'title' => 'Manage existing schema',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('auto_id_edit_schema_form'),
-    'file' => 'auto_id.config.inc',
+    'page arguments' => array('date_serial_edit_schema_form'),
+    'file' => 'date_serial.config.inc',
     'access arguments' => array('administer site configuration'),
     'type' => MENU_NORMAL_ITEM,
   );

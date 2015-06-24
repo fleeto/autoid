@@ -11,7 +11,7 @@
  * @param array $form_state
  * @return array
  */
-function auto_id_create_schema_form($form,  &$form_state) {
+function date_serial_create_schema_form($form,  &$form_state) {
 
   $form['module_name'] = array(
     '#type' => 'select',
@@ -54,12 +54,12 @@ function auto_id_create_schema_form($form,  &$form_state) {
 
 
 
-function auto_id_create_schema_form_submit($form, &$form_state) {
+function date_serial_create_schema_form_submit($form, &$form_state) {
   drupal_write_record('flow_id_schema', $form_state['values']);
   drupal_set_message('New ID Schema had been created.');
 }
 
-function auto_id_edit_schema_form($form,  &$form_state) {
+function date_serial_edit_schema_form($form,  &$form_state) {
   $header = array(
     'sid' => t('Schema ID'),
     'module_name' => t('Module name'),
@@ -71,11 +71,11 @@ function auto_id_edit_schema_form($form,  &$form_state) {
   );
 
   $rows = array();
-  $schema_list = auto_id::get_all_schema_id();
+  $schema_list = date_serial::get_all_schema_id();
 
   foreach($schema_list  as $schema_id => $schema) {
     $row = array_fill(0, 7, 'N/A');
-    $info = auto_id::get_schema_info($schema_id);
+    $info = date_serial::get_schema_info($schema_id);
     $row['sid'] = $schema_id;
     $row['module_name'] = $info['module_name'];
     $row['key_prefix'] = $info['key_prefix'];
@@ -101,12 +101,12 @@ function auto_id_edit_schema_form($form,  &$form_state) {
 
 }
 
-function auto_id_edit_schema_form_submit($form,  &$form_state) {
+function date_serial_edit_schema_form_submit($form,  &$form_state) {
   $select = $form_state['values']['schema_select'];
   foreach($select as $id => $value) {
     if ($value === 0)
       continue;
-    if (auto_id::remove_schema($value))
+    if (date_serial::remove_schema($value))
       drupal_set_message(t("Schema '{$value}' had been deleted."));
   }
 }

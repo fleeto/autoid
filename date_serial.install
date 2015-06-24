@@ -6,7 +6,7 @@
  * Time: 上午11:23
  */
 
-function auto_id_schema() {
+function date_serial_schema() {
   $schema['flow_id_schema'] = array(
     'fields' => array(
       'sid' => array(
