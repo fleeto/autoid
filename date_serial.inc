@@ -3,11 +3,6 @@
 /**
  * @file
  * Core class.
- *
- * Created by IntelliJ IDEA.
- * User: dustise
- * Date: 14-8-12
- * Time: 下午3:03
  */
 
 /**
@@ -40,33 +35,34 @@ class DateSerial {
     $new_value = FALSE;
     db_query('LOCK TABLES flow_id_content as c READ, flow_id_content WRITE');
     try {
-      foreach ($schema_list as $schema_id => $schema) {
-        if ($module_name == $schema->{'module_name'} && $prefix == $schema->{'key_prefix'}) {
-          $date_str = date($schema->{'date_format'});
+      foreach ($schema_list as $schema) {
+        if ($module_name == $schema->module_name && $prefix == $schema->key_prefix) {
+          $date_str = date($schema->date_format);
           $key = "{$prefix}{$date_str}";
           // Search for the specified key.
           $result = db_select('flow_id_content', 'c')
-            ->fields('c', array())
-            ->condition('id_key', $key, '=');
-          $result = $result->{'execute'}();
-          if ($result->{'rowCount'}() > 0) {
-            $seed = $result->{'fetchAssoc'}()['id_seed'];
+            ->fields('c')
+            ->condition('id_key', $key);
+          $result = $result->execute();
+          if ($result->rowCount() > 0) {
+            $assoc = $result->fetchAssoc();
+            $seed = $assoc['id_seed'];
             $new_seed = $seed + 1;
-            $new_value = sprintf($schema->{'seed_format'}, $new_seed);
+            $new_value = sprintf($schema->seed_format, $new_seed);
             $new_value = "{$key}{$new_value}";
             db_update('flow_id_content')
               ->fields(array(
                 'id_seed' => $new_seed,
                 'id_value' => $new_value,
               ))
-              ->condition('module_name', $module_name, '=')
-              ->condition('key_prefix', $prefix, '=')
-              ->condition('id_key', $key, '=')
+              ->condition('module_name', $module_name)
+              ->condition('key_prefix', $prefix)
+              ->condition('id_key', $key)
               ->execute();
           }
           else {
             $new_seed = 1;
-            $new_value = sprintf($schema->{'seed_format'}, $new_seed);
+            $new_value = sprintf($schema->seed_format, $new_seed);
             $new_value = $key . $new_value;
             db_insert('flow_id_content')->fields(array(
               'module_name' => $module_name,
@@ -81,8 +77,7 @@ class DateSerial {
       }
     }
     catch (Exception $e) {
-      echo $e->getMessage();
-      echo $e->getTraceAsString();
+      $new_value = FALSE;
     }
 
     db_query('UNLOCK TABLES');
@@ -97,7 +92,7 @@ class DateSerial {
    */
   public static function getAllSchema() {
     $result = db_select('flow_id_schema', 'n')
-      ->fields('n', array())
+      ->fields('n')
       ->execute()
       ->fetchAllAssoc('sid');
     return $result;
@@ -118,12 +113,12 @@ class DateSerial {
    */
   public static function getSchemaInfo($sid = 0, $module_name = '', $prefix = '') {
     $query = db_select('flow_id_schema', 's')
-      ->fields('s', array());
+      ->fields('s');
     if ($sid > 0) {
-      $query = $query->condition('sid', $sid, '=');
+      $query = $query->condition('sid', $sid);
     }
     else {
-      if ((strlen($module_name) > 0) AND (strlen($prefix) > 0)) {
+      if ((strlen($module_name) > 0) && (strlen($prefix) > 0)) {
         $query->condition('module_name', $module_name)
           ->condition('key_prefix', $prefix);
       }
@@ -131,25 +126,25 @@ class DateSerial {
         return FALSE;
       }
     }
-    $result = $query->{'execute'}();
-    if ($result->{'rowCount'}() == 0) {
+    $result = $query->execute();
+    if ($result->rowCount() == 0) {
       return FALSE;
     }
 
-    $schema = $result->{'fetchAssoc'}();
+    $schema = $result->fetchAssoc();
     $module_name = $schema['module_name'];
     $prefix = $schema['key_prefix'];
 
     $query = db_select('flow_id_content', 'content')
-      ->fields('content', array())
-      ->condition('module_name', $module_name, '=')
-      ->condition('key_prefix', $prefix, '=')
+      ->fields('content')
+      ->condition('module_name', $module_name)
+      ->condition('key_prefix', $prefix)
       ->orderBy('fid', 'DESC')
-      ->{'range'}(0, 1);
+      ->range(0, 1);
 
-    $result = $query->{'execute'}();
-    if ($result->{'rowCount'}() > 0) {
-      $info = $result->{'fetchAssoc'}();
+    $result = $query->execute();
+    if ($result->rowCount() > 0) {
+      $info = $result->fetchAssoc();
     }
     else {
       $info = array();
@@ -174,11 +169,11 @@ class DateSerial {
       return FALSE;
     }
     db_delete('flow_id_content')
-      ->condition('module_name', $schema['module_name'], '=')
-      ->condition('key_prefix', $schema['key_prefix'], '=')
+      ->condition('module_name', $schema['module_name'])
+      ->condition('key_prefix', $schema['key_prefix'])
       ->execute();
     db_delete('flow_id_schema')
-      ->condition('sid', $sid, '=')
+      ->condition('sid', $sid)
       ->execute();
 
     return TRUE;
