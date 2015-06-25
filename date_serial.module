@@ -1,10 +1,8 @@
 <?php
 
 /**
+ * @file
  * Created by IntelliJ IDEA.
- * User: dustise
- * Date: 14-8-12
- * Time: 下午3:03
  */
 
 /**
@@ -12,7 +10,7 @@
  */
 function date_serial_menu() {
   $items = array();
-  $items['admin/config/date_serial'] = array(
+  $items['admin/config/dateserial'] = array(
     'title' => 'Auto ID configuration',
     'access arguments' => array('administer site configuration'),
     'position' => 'left',
@@ -21,7 +19,7 @@ function date_serial_menu() {
     'file' => 'system.admin.inc',
     'file path' => drupal_get_path('module', 'system'),
   );
-  $items['admin/config/date_serial/create'] = array(
+  $items['admin/config/dateserial/create'] = array(
     'title' => 'Create new ID schema',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('date_serial_create_schema_form'),
@@ -29,7 +27,7 @@ function date_serial_menu() {
     'access arguments' => array('administer site configuration'),
     'type' => MENU_NORMAL_ITEM,
   );
-  $items['admin/config/date_serial/edit'] = array(
+  $items['admin/config/dateserial/edit'] = array(
     'title' => 'Manage existing schema',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('date_serial_edit_schema_form'),
@@ -39,5 +37,3 @@ function date_serial_menu() {
   );
   return $items;
 }
-
-

@@ -1,16 +1,36 @@
 <?php
 
 /**
+ * @file
+ * Core class.
+ *
  * Created by IntelliJ IDEA.
  * User: dustise
  * Date: 14-8-12
  * Time: 下午3:03
  */
-class date_serial {
-  public static function new_id($module_name, $prefix) {
+
+/**
+ * Class DateSerial: Core class for this module.
+ */
+class DateSerial {
+
+  /**
+   * Generate new serial code.
+   *
+   * @param string $module_name
+   *   Which module will use this serial number.
+   * @param string $prefix
+   *   The prefix for the serial number.
+   *
+   * @return bool|string
+   *   return FALSE if we can't find the schema.
+   */
+  public static function newSerial($module_name, $prefix) {
     $schema_list = cache_get('date_serial_schema');
-    if ($schema_list === FALSE) {
-      $schema_list = date_serial::get_all_schema_id();
+
+    if ($schema_list == FALSE) {
+      $schema_list = DateSerial::getAllSchema();
       cache_set('date_serial_schema', $schema_list);
     }
     else {
@@ -24,7 +44,7 @@ class date_serial {
         if ($module_name == $schema->{'module_name'} && $prefix == $schema->{'key_prefix'}) {
           $date_str = date($schema->{'date_format'});
           $key = "{$prefix}{$date_str}";
-          //Search for the specified key
+          // Search for the specified key.
           $result = db_select('flow_id_content', 'c')
             ->fields('c', array())
             ->condition('id_key', $key, '=');
@@ -59,15 +79,23 @@ class date_serial {
 
         }
       }
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       echo $e->getMessage();
       echo $e->getTraceAsString();
     }
+
     db_query('UNLOCK TABLES');
     return $new_value;
   }
 
-  public static function get_all_schema_id() {
+  /**
+   * Get all schema from db.
+   *
+   * @return mixed
+   *   The content of the schema table.
+   */
+  public static function getAllSchema() {
     $result = db_select('flow_id_schema', 'n')
       ->fields('n', array())
       ->execute()
@@ -76,12 +104,19 @@ class date_serial {
   }
 
   /**
+   * Find schema by sid, or by module name and prefix.
+   *
    * @param int $sid
+   *   Primary key.
    * @param string $module_name
+   *   Module name.
    * @param string $prefix
-   * @return bool
+   *   Prefix of the serial.
+   *
+   * @return bool|array
+   *   Schema info in an array, or FALSE.
    */
-  public static function get_schema_info($sid = 0, $module_name = '', $prefix = '') {
+  public static function getSchemaInfo($sid = 0, $module_name = '', $prefix = '') {
     $query = db_select('flow_id_schema', 's')
       ->fields('s', array());
     if ($sid > 0) {
@@ -101,9 +136,7 @@ class date_serial {
       return FALSE;
     }
 
-
     $schema = $result->{'fetchAssoc'}();
-
     $module_name = $schema['module_name'];
     $prefix = $schema['key_prefix'];
 
@@ -126,8 +159,17 @@ class date_serial {
 
   }
 
-  public static function remove_schema($sid) {
-    $schema = date_serial::get_schema_info($sid);
+  /**
+   * Remove specified schema and all its recordes.
+   *
+   * @param int $sid
+   *   Primary key.
+   *
+   * @return bool
+   *   Result of deleting.
+   */
+  public static function removeSchema($sid) {
+    $schema = DateSerial::getSchemaInfo($sid);
     if (!$schema) {
       return FALSE;
     }
@@ -141,4 +183,5 @@ class date_serial {
 
     return TRUE;
   }
+
 }
